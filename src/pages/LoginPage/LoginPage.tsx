@@ -10,6 +10,9 @@ import { userAtom } from '../../stores/user';
 import { ResponseDto } from '../../api/dto/responseDto';
 import { useNavigate } from 'react-router-dom';
 import { TailSpin } from 'react-loader-spinner';
+import Modal from '../../components/Modal';
+import { InitPwReqDto } from '../../api/dto/user';
+import { patchInitPw } from '../../api/userApi';
 
 const loginPageStyle = css`
   display: flex;
@@ -18,6 +21,16 @@ const loginPageStyle = css`
   justify-content: center;
   height: 100vh;
   background-color: #f4f4f4;
+  
+  button {
+  margin: 10px;
+  padding: 10px;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  }
 `;
 
 const loginFormStyle = css`
@@ -60,6 +73,13 @@ const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const [userState, setUserState] = useRecoilState(userAtom);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  const [initPwId, setInitPwId] = useState('');
+
   const login = async (loginUserInfo: LoginReqDto) => {
     // 뭔가 데이터 가져오는 함수
     const res = await postLogin(loginUserInfo);
@@ -92,6 +112,36 @@ const { mutate: loginMutate } = useMutation(
       setIsLoading(false);
     },
   },
+);
+
+const initPw = async (initPwReq: InitPwReqDto) => {
+  // 뭔가 데이터 가져오는 함수
+  const res = await patchInitPw(initPwReq);
+  return res;
+}
+
+const { mutate: initPwMutate } = useMutation(
+{
+  mutationFn: initPw,
+  onSuccess: mutateData => {
+    if (mutateData.header.resultCode === 0) {
+      const data = mutateData.data;
+
+      alert(data.message);
+    } else {
+      setErrorMessage(mutateData.header.resultMessage);
+    }
+    closeModal();
+  },
+  onError: (error: AxiosError) => {
+    if (error.response?.status === 400) {
+      alert("비밀번호 초기화 실패");
+    } else {
+      // 다른 서버 에러 처리
+    }
+    closeModal();
+  },
+},
 );
 
 
@@ -138,6 +188,22 @@ const { mutate: loginMutate } = useMutation(
         <button type="submit">로그인</button>
         {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
       </form>
+      <button onClick={() => openModal()}>비밀번호 초기화</button>
+
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <h2>비밀번호 초기화 (이메일로 새로운 비밀번호 전송)</h2>
+        <input
+          type="text"
+          placeholder="해당 유저 아이디"
+          value={initPwId}
+          onChange={(e) => setInitPwId(e.target.value)}
+        />
+        <button onClick={() => {
+          initPwMutate({
+            id: initPwId
+          })
+        }}>초기화</button>
+      </Modal>
     </div>
   );
 };

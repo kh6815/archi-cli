@@ -1,6 +1,6 @@
 import { axiosClient } from "../util/axiosClient";
 import { ResponseDto } from "./dto/responseDto";
-import { SignUpReqDto, SignUpResDto } from "./dto/user";
+import { InitPwReqDto, InitPwResDto, SignUpReqDto, SignUpResDto } from "./dto/user";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -46,6 +46,27 @@ export const postSignUp = async (
   console.log('postSignUp');
   const url = `${apiUrl}/user/signup`;
   const res = await axiosClient.post<ResponseDto<SignUpResDto>>(url, signUpInfo);
+  return res.data;
+//   const res: ResponseDto<SignUpResDto> = {
+//     header: {
+//       resultCode: 0,
+//       resultMessage: 'SUCCESS',
+//     },
+//     data: {
+//       id: 'kkk',
+//     },
+//     errorData: null,
+//   };
+
+//   return res;
+};
+
+export const patchInitPw = async (
+  initPwReq: InitPwReqDto,
+): Promise<ResponseDto<InitPwResDto>> => {
+  console.log('patchInitPw');
+  const url = `${apiUrl}/user/init-password`;
+  const res = await axiosClient.patch<ResponseDto<InitPwResDto>>(url, initPwReq);
   return res.data;
 //   const res: ResponseDto<SignUpResDto> = {
 //     header: {
