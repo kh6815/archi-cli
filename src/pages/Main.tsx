@@ -36,6 +36,21 @@ const MainPage: React.FC = () => {
             title: "3번 게시물",
             imageUrl: "https://archis3.s3.ap-northeast-2.amazonaws.com/dev/photo/file_1725059467601.png",
           },
+          {
+            id: 4,
+            title: "4번 게시물",
+            imageUrl: "https://archis3.s3.ap-northeast-2.amazonaws.com/dev/photo/file_1725059467601.png",
+          },
+          {
+            id: 5,
+            title: "5번 게시물",
+            imageUrl: "https://archis3.s3.ap-northeast-2.amazonaws.com/dev/photo/file_1725059467601.png",
+          },
+          {
+            id: 6,
+            title: "6번 게시물",
+            imageUrl: "https://archis3.s3.ap-northeast-2.amazonaws.com/dev/photo/file_1725059467601.png",
+          },
         ]} />
         <PostList posts={posts} />
       </div>

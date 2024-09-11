@@ -4,16 +4,27 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom'; //사용을 위해 import 해주고
+import { RecoilRoot } from 'recoil';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import AxiosInterceptors from './util/AxiosInterceptors';
+
+const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
 root.render(
-  <BrowserRouter>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  </BrowserRouter>
+  <RecoilRoot>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <React.StrictMode>
+          <AxiosInterceptors />
+          <App />
+        </React.StrictMode>
+      </BrowserRouter>
+    </QueryClientProvider>
+  </RecoilRoot>
 );
 
 // If you want to start measuring performance in your app, pass a function
