@@ -8,6 +8,8 @@ export interface UserData {
   accessToken: string | null;
   refreshToken: string | null;
   role: string | null;
+  imgUrl: string | null;
+  nickName: string | null;
 }
 
 export const userAtom = atom<UserData>({
@@ -17,6 +19,8 @@ export const userAtom = atom<UserData>({
     accessToken: null,
     refreshToken: null,
     role: null,
+    imgUrl: null,
+    nickName: null,
   },
   effects_UNSTABLE: [persistAtom]
 });

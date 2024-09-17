@@ -12,6 +12,8 @@ export interface LoginDto {
   accessToken: string;
   refreshToken: string;
   role: string;
+  imgUrl: string;
+  nickName: string;
 }
 
 export const ROLETPYE = {

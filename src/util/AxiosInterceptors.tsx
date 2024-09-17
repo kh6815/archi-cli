@@ -15,6 +15,8 @@ export default function AxiosInterceptors() {
     accessToken: null,
     refreshToken: null,
     role: null,
+    imgUrl: null,
+    nickName: null
   });
   const navigate = useNavigate();
 
@@ -32,7 +34,9 @@ export default function AxiosInterceptors() {
       id: refreshRes.id,
       accessToken: refreshRes.accessToken,
       refreshToken: refreshRes.refreshToken,
-      role : refreshRes.role
+      role : refreshRes.role,
+      imgUrl: refreshRes.imgUrl,
+      nickName: refreshRes.nickName
     });
   };
 

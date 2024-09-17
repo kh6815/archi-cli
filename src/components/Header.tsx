@@ -2,12 +2,13 @@
 import { css } from '@emotion/react';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useResetRecoilState } from 'recoil';
 import { userAtom } from '../stores/user';
 import { LogoutReqDto, ROLETPYE } from '../api/dto/auth';
 import { postLogOut } from '../api/authApi';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import PersonIcon from '@mui/icons-material/Person';
 
 export enum HeaderType {
     ORIGIN = "ORIGIN",
@@ -53,9 +54,34 @@ const headerStyle = css`
   }
 `;
 
+const userImgContanierStyle = css`
+  display: flex;
+  flex-direction: flex-start;
+  align-items: center;
+  justify-content: flex-start;
+`
+
+const userImgStyle = css`
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+`;
+
+const userNameTextStyle = css`
+  margin-left: 5px;
+  font-size: 15px;
+`
+
 const Header: React.FC<{ type: HeaderType }> = ({ type }) => {
 
   const [userState, setUserState] = useRecoilState(userAtom);
+  const initUserState = useResetRecoilState(userAtom);
   const navigate = useNavigate();
 
   const logout = async (logoutReqDto: LogoutReqDto) => {
@@ -69,12 +95,7 @@ const { mutate: logoutMutate } = useMutation(
     onSuccess: mutateData => {
       if (mutateData.header.resultCode === 0) {
         const userData = mutateData.data;
-        setUserState({
-          id: userData.id,
-          accessToken: userData.accessToken,
-          refreshToken: userData.refreshToken,
-          role: userData.role
-        });
+        initUserState();
         navigate("/");
       } else {
         alert(mutateData.header.resultMessage);
@@ -107,7 +128,11 @@ const { mutate: logoutMutate } = useMutation(
           userState.id !== null && 
           <>
               { userState.role === ROLETPYE.ADMIN && <Link to="/admin/setting" style={{ textDecoration: "none"}}>페이지 세팅 설정</Link>}
-              <Link to="/my" style={{ textDecoration: "none"}}>마이페이지</Link>
+              <div css={userImgContanierStyle}>
+                  {userState.imgUrl === null && <div css={userImgStyle}><Link to="/my" style={{ textDecoration: "none"}}><PersonIcon /></Link></div>}
+                  {userState.imgUrl !== null && <div css={userImgStyle}><Link to="/my" style={{ textDecoration: "none"}}><img src={userState.imgUrl} /></Link></div>}
+                  <div css={userNameTextStyle}>{userState.nickName}</div>
+              </div>
               {type === HeaderType.ORIGIN && <button>🔔</button>}
               <button onClick={handleLogout}>로그아웃</button>
           </>

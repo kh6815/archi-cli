@@ -65,6 +65,12 @@ const postListStyle = css`
     color: #333;
   }
 
+  .post-commnon-img-tab {
+    width: 80px;
+    height: 80px;
+    background-color: lightgray;
+  }
+
   .post-image {
     width: 80px;
     height: 80px;
@@ -167,13 +173,13 @@ const PostList: React.FC<{ categoryId: number }> = ({ categoryId }) => {
         {userState.role === ROLETPYE.ADMIN && <Link to={"/create/notice"}><div className='create-notice'>{"공지사항 등록"}</div></Link>}
         <Link to={"/create/post"}><div className='create-post'>{"게시글 등록"}</div></Link>
       </div>}
-      {/* <div className="notice">공지사항: 새로운 커뮤니티 기능이 추가되었습니다!</div> */}
       <ul>
         {
           categoryId === 0 && <>
             {noticeList.map(notice => (
               <li key={notice.id} className="notice">
                   <Link to={`/notice/${notice.id}`}>
+                    {!notice.imgUrl && <div className='post-commnon-img-tab'/>}
                     {notice.imgUrl && <img src={notice.imgUrl} alt={notice.title} className="post-image" />}
                     <div className='post-content'>{notice.title}</div>
                   </Link>
@@ -184,6 +190,7 @@ const PostList: React.FC<{ categoryId: number }> = ({ categoryId }) => {
         {paginatedPosts.map(post => (
           <li key={post.id}>
               <Link to={`/post/${post.id}`}>
+                {!post.imgUrl && <div className='post-commnon-img-tab'/>}
                 {post.imgUrl && <img src={post.imgUrl} alt={post.title} className="post-image" />}
                 <div className='post-content'>{post.title}</div>
               </Link>

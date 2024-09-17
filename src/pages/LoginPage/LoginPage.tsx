@@ -96,7 +96,9 @@ const { mutate: loginMutate } = useMutation(
           id: userData.id,
           accessToken: userData.accessToken,
           refreshToken: userData.refreshToken,
-          role: userData.role
+          role: userData.role,
+          imgUrl: userData.imgUrl,
+          nickName: userData.nickName
         });
         navigate("/");
       } else {
