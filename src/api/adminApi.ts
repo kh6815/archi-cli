@@ -1,5 +1,5 @@
 import { axiosClient } from "../util/axiosClient";
-import { AddCategoryReq, AddNoticeReq, GetAdminCategoryListDto, UpdateCategoryReq } from "./dto/admin";
+import { AddCategoryReq, AddNoticeReq, DeleteNoticeReq, GetAdminCategoryListDto, UpdateCategoryReq, UpdateNoticeReq } from "./dto/admin";
 import { ResponseDto } from "./dto/responseDto";
 
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -48,5 +48,25 @@ export const postAddNotice = async (
   console.log('addNotice');
   const url = `${apiUrl}/admin/notice/add`;
   const res = await axiosClient.post<ResponseDto<number>>(url, addNoticeReq);
+  return res.data;
+};
+
+export const updateNotice = async (
+  updateNoticeReq: UpdateNoticeReq,
+): Promise<ResponseDto<Boolean>> => {
+  console.log('updateNotice');
+  const url = `${apiUrl}/admin/notice/update`;
+  const res = await axiosClient.patch<ResponseDto<Boolean>>(url, updateNoticeReq);
+  return res.data;
+};
+
+export const deleteNotice = async (
+  deleteNoticeReq: DeleteNoticeReq,
+): Promise<ResponseDto<Boolean>> => {
+  console.log('deleteNotice');
+  const url = `${apiUrl}/admin/notice/delete`;
+  const res = await axiosClient.delete<ResponseDto<Boolean>>(url, {
+    data: deleteNoticeReq
+  });
   return res.data;
 };

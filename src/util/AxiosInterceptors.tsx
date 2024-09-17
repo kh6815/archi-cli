@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { useRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState } from "recoil";
 import { userAtom, UserData } from "../stores/user";
 import { useNavigate } from "react-router-dom";
 import { postRefresh } from "../api/authApi";
@@ -9,6 +9,7 @@ import React from 'react';
 
 export default function AxiosInterceptors() {
   const [userState, setUserState] = useRecoilState(userAtom);
+  const resetUserState = useResetRecoilState(userAtom);
   let isRefresh = false;
   const userStateRef = useRef<UserData>({
     id: null,

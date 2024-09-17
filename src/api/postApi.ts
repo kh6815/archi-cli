@@ -1,5 +1,5 @@
 import { axiosClient } from "@util/axiosClient";
-import { AddCommentReq, AddPostReqDto, DeletePostReq, GetCategoryListDto, GetPostReqDto, NoticeListDto, PopularPostDto, PostCommentListDto, PostDto, PostListDto, UpdateCommentLikeReq, UpdateCommentReq, UpdateContentLikeReq, UpdatePostReq } from "@api/dto/post";
+import { AddCommentReq, AddPostReqDto, DeletePostReq, GetCategoryListDto, GetPostReqDto, NoticeDto, NoticeListDto, PopularPostDto, PostCommentListDto, PostDto, PostListDto, UpdateCommentLikeReq, UpdateCommentReq, UpdateContentLikeReq, UpdatePostReq } from "@api/dto/post";
 import { ResponseDto, ResponsePaingDto } from "@api/dto/responseDto";
 
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -55,6 +55,15 @@ export const GetCommentList = async (
   console.log('GetCommentList');
   const url = `${apiUrl}/comment/list/${contentId}`;
   const res = await axiosClient.get<ResponseDto<PostCommentListDto[]>>(url);
+  return res.data;
+};
+
+export const GetNotice = async (
+  noticeId: number
+): Promise<ResponseDto<NoticeDto>> => {
+  console.log('GetPost');
+  const url = `${apiUrl}/content/get/notice/${noticeId}`;
+  const res = await axiosClient.get<ResponseDto<NoticeDto>>(url);
   return res.data;
 };
 

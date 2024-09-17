@@ -28,7 +28,7 @@ export interface GetPostReqDto {
 export interface PostDto {
   id: number;
   categoryName: string;
-  delYn: string;
+  // delYn: string;
   title: string;
   content: string;
   updatedAt: string;
@@ -63,6 +63,17 @@ export interface PostListDto {
   updatedAt: string;
   like: number;
   imgUrl: string;
+}
+
+export interface NoticeDto {
+  id: number;
+  title: string;
+  content: string;
+  updatedAt: string;
+  isAvailableUpdate: number;
+  noticeAuthorNickName: string;
+  noticeAuthorImgUrl: string;
+  fileList: AddFileRes[];
 }
 
 export interface NoticeListDto {

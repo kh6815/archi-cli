@@ -17,8 +17,10 @@ export interface AddNoticeReq {
 export interface UpdateNoticeReq {
     id: number,
     title: string,
-    content: string,
-    imgFileIdList: number[]
+    content: string
+    addFileIdList: number[]
+    updateFileMap: Record<number, string>
+    deleteFileIdList: number[]
 }
 
 export interface DeleteNoticeReq {

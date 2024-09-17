@@ -528,15 +528,15 @@ const PostPage: React.FC = () => {
             <div css = {postMenuStyle}>
               <div css={postCategoryStyle}>카테고리 &gt; {post?.categoryName}</div>
               <div>
-                {post.isAvailableUpdate && post.delYn === 'N' && <>
+                {post.isAvailableUpdate && <>
                   <span onClick={handleUpdatePost}><EditIcon /></span>
                   <span onClick={handleDeletePost}><DeleteIcon /></span>
                 </>}
               </div>
             </div>
             <h1 css={postTitleStyle}>{post?.title}</h1>
-            {post.delYn === "N" && <div css={postContentStyle} dangerouslySetInnerHTML={{ __html: post!.content }}></div>}
-            {post.delYn === "Y" && <div css={[postContentStyle, deleteTextStyle]}>{post.content}</div>}
+            <div css={postContentStyle} dangerouslySetInnerHTML={{ __html: post!.content }}></div>
+            {/* {post.delYn === "Y" && <div css={[postContentStyle, deleteTextStyle]}>{post.content}</div>} */}
             <div css={postMenuLikeStyle} onClick={handleContentLike}>
               {userState.id === null && <FavoriteBorderIcon />}
               {userState.id !== null && post.likeUserIds.includes(userState.id) && <FavoriteIcon />}

@@ -11,6 +11,7 @@ import PostPage from './pages/PostPage/PostPage';
 import NoticeCreatePage from './pages/PostPage/NoticeCreatePage';
 import PostCreatePage from './pages/PostPage/PostCreatePage';
 import AdminSettingPage from './pages/AdminPage/AdminSettingPage';
+import NoticePage from '@pages/PostPage/NoticePage';
 
 function App() {
   const [urlPath, setUrlPath] = useState(HeaderType.ORIGIN);
@@ -36,7 +37,7 @@ function App() {
           <Route path="/signup" element={<SignUpPage />}></Route>
 					<Route path="/category/*" element={<PostListPage />}></Route>
           <Route path="/post/*" element={<PostPage />}></Route>
-          {/* <Route path="/notice/*" element={<PostPage />}></Route> */}
+          <Route path="/notice/*" element={<NoticePage />}></Route>
           <Route path="/create/post" element={<PostCreatePage />}></Route>
           <Route path="/create/notice" element={<NoticeCreatePage />}></Route>
           <Route path="/admin/setting" element={<AdminSettingPage />}></Route>

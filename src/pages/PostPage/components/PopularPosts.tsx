@@ -51,6 +51,10 @@ const popularPostsStyle = css`
   .post-item a {
     text-decoration: none;
     color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 `;
 
