@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -19,15 +15,21 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["@emotion/react/types/css-prop"]
+    "types": ["@emotion/react/types/css-prop"],
+    "baseUrl": "src",
+    "paths": {
+      // "@/*": ["./*"],
+      "@api/*": ["api/*"],
+      "@assets/*": ["assets/*"],
+      "@common/*": ["common/*"],
+      "@components/*": ["components/*"],
+      "@pages/*": ["pages/*"],
+      "@stores/*": ["stores/*"],
+      "@styles/*": ["styles/*"],
+      "@util/*": ["util/*"],
+      "react": ["./node_modules/@types/react"]
+    }
   },
-  "baseUrl": "./src",
-  "paths": {
-    "@/*": ["./*"],
-    "react": ["./node_modules/@types/react"]
-  },
-  // "include": [
-  //   "src"
-  // ],
-  "exclude": ["node_modules"]
+  "include": ["src"],
+  "exclude": ["node_modules", "./tsconfig.paths.json"]
 }

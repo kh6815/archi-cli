@@ -96,6 +96,7 @@ const { mutate: loginMutate } = useMutation(
           id: userData.id,
           accessToken: userData.accessToken,
           refreshToken: userData.refreshToken,
+          role: userData.role
         });
         navigate("/");
       } else {

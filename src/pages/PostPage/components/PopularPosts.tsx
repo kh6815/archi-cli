@@ -1,18 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import React from 'react';
+import { useMutation } from '@tanstack/react-query';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
-// 게시물 타입 정의
-interface Post {
-  id: number;
-  title: string;
-  imageUrl: string; // 이미지 URL 추가
-}
-
-interface PopularPostsProps {
-  posts: Post[];
-}
+import { PopularPostDto } from '../../../api/dto/post';
+import { GetPopularPostList } from '../../../api/postApi';
+import { AxiosError } from 'axios';
 
 const popularPostsStyle = css`
   position: relative;
@@ -61,15 +54,49 @@ const popularPostsStyle = css`
   }
 `;
 
-const PopularPosts: React.FC<PopularPostsProps> = ({ posts }) => {
+const PopularPosts: React.FC = ({}) => {
+
+  const [popularPostList, setPopularPostList] = useState<PopularPostDto[]>([]);
+
+  const getPopularPostListApi = async () => {
+    const res = await GetPopularPostList();
+    return res;
+  }
+  
+  const { mutate: getPopularPostListMutate } = useMutation(
+  {
+    mutationFn: getPopularPostListApi,
+    onSuccess: mutateData => {
+      if (mutateData.header.resultCode === 0) {
+        const data = mutateData.data;
+
+        setPopularPostList(data);
+      } else {
+        alert(mutateData.header.resultMessage);
+      }
+    },
+    onError: (error: AxiosError) => {
+        if (error.response?.status === 400) {
+            alert("인기 게시글 조회 실패");
+          } else {
+            alert("서버 오류 발생");
+          }
+    },
+  },
+  );
+
+  useEffect(() => {
+    getPopularPostListMutate();
+  }, [])
+
   return (
     <section css={popularPostsStyle}>
       <h3>인기 게시물</h3>
       <div className="posts-container">
-        {posts.map(post => (
+        {popularPostList.map(post => (
           <div className="post-item" key={post.id}>
             <Link to={`/post/${post.id}`}>
-                <img src={post.imageUrl} alt={post.title} className="post-image" />
+                {post.imgUrl !== "" && <img src={post.imgUrl} alt={post.title} className="post-image" />}
                 {post.title}
             </Link>
           </div>

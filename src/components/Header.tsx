@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { userAtom } from '../stores/user';
-import { LogoutReqDto } from '../api/dto/auth';
+import { LogoutReqDto, ROLETPYE } from '../api/dto/auth';
 import { postLogOut } from '../api/authApi';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
@@ -73,6 +73,7 @@ const { mutate: logoutMutate } = useMutation(
           id: userData.id,
           accessToken: userData.accessToken,
           refreshToken: userData.refreshToken,
+          role: userData.role
         });
         navigate("/");
       } else {
@@ -105,11 +106,12 @@ const { mutate: logoutMutate } = useMutation(
         {
           userState.id !== null && 
           <>
-              <button onClick={handleLogout}>로그아웃</button>
+              { userState.role === ROLETPYE.ADMIN && <Link to="/admin/setting" style={{ textDecoration: "none"}}>페이지 세팅 설정</Link>}
               <Link to="/my" style={{ textDecoration: "none"}}>마이페이지</Link>
+              {type === HeaderType.ORIGIN && <button>🔔</button>}
+              <button onClick={handleLogout}>로그아웃</button>
           </>
         }
-        {type === HeaderType.ORIGIN && <button>🔔</button>}
       </div>
     </header>
   );

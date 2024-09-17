@@ -18,10 +18,10 @@ root.render(
   <RecoilRoot>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <React.StrictMode>
+        {/* <React.StrictMode> */}
           <AxiosInterceptors />
           <App />
-        </React.StrictMode>
+        {/* </React.StrictMode> */}
       </BrowserRouter>
     </QueryClientProvider>
   </RecoilRoot>

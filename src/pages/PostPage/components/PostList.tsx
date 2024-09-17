@@ -3,6 +3,13 @@ import { css } from '@emotion/react';
 import React, { useState, useEffect } from 'react';
 import Pagination from '../../../components/Pagination';
 import { Link } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { userAtom } from '../../../stores/user';
+import { ROLETPYE } from '../../../api/dto/auth';
+import { GetNoticeList, GetPostList } from '../../../api/postApi';
+import { useMutation } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
+import { GetPostReqDto, NoticeListDto, PostListDto } from '../../../api/dto/post';
 
 const postListStyle = css`
   position: relative;
@@ -10,8 +17,34 @@ const postListStyle = css`
 
   .notice {
     background-color: #ffeb3b;
-    padding: 10px;
-    margin-bottom: 20px;
+  }
+
+  a {
+    text-decoration: none;
+    color: #333;
+  }
+
+  .create-post-container {
+    display: flex;
+    justify-content: flex-end; /* 오른쪽 끝으로 배치 */
+    margin-bottom: 20px; /* 아래 요소와의 간격 */
+  }
+
+  .create-notice {
+    margin-right: 10px;
+    padding: 10px 20px;
+    background-color: red; /* 배경색 */
+    color: white; /* 텍스트 색 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    cursor: pointer;
+  }
+
+  .create-post {
+    padding: 10px 20px;
+    background-color: #4CAF50; /* 배경색 */
+    color: white; /* 텍스트 색 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    cursor: pointer;
   }
 
   ul {
@@ -44,33 +77,114 @@ const postListStyle = css`
   }
 `;
 
-interface Post {
-  id: number;
-  title: string;
-  imageUrl?: string; // 이미지 URL 선택적 추가
-}
-
-const PostList: React.FC<{ posts: Post[] }> = ({ posts }) => {
+const PostList: React.FC<{ categoryId: number }> = ({ categoryId }) => {
+  const pageSize = 10;
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(10);
-  const [paginatedPosts, setPaginatedPosts] = useState<Post[]>([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const [paginatedPosts, setPaginatedPosts] = useState<PostListDto[]>([]);
+  const [noticeList, setNoticeList] = useState<NoticeListDto[]>([]);
+  const [userState, setUserState] = useRecoilState(userAtom);
+
+  const getNoticeListApi = async () => {
+    const res = await GetNoticeList();
+    return res;
+  }
+  
+  const { mutate: getNoticeListMutate } = useMutation(
+  {
+    mutationFn: getNoticeListApi,
+    onSuccess: mutateData => {
+      if (mutateData.header.resultCode === 0) {
+        const data = mutateData.data;
+
+        setNoticeList(data);
+      } else {
+        alert(mutateData.header.resultMessage);
+      }
+    },
+    onError: (error: AxiosError) => {
+        if (error.response?.status === 400) {
+            alert("공지사항 조회 실패");
+          } else {
+            alert("서버 오류 발생");
+          }
+    },
+  },
+  );
+
+  const getPostListApi = async (getPostReqDto: GetPostReqDto) => {
+    const res = await GetPostList(getPostReqDto);
+    return res;
+  }
+  
+  const { mutate: getPostListMutate } = useMutation(
+  {
+    mutationFn: getPostListApi,
+    onSuccess: mutateData => {
+      if (mutateData.header.resultCode === 0) {
+        const data = mutateData.data;
+
+        setPaginatedPosts(data.content);
+        setTotalPages(data.totalPages);
+
+      } else {
+        alert(mutateData.header.resultMessage);
+      }
+    },
+    onError: (error: AxiosError) => {
+        if (error.response?.status === 400) {
+            alert("게시글 조회 실패");
+          } else {
+            alert("서버 오류 발생");
+          }
+    },
+  },
+  );
 
   useEffect(() => {
-    const indexOfLastPost = currentPage * postsPerPage;
-    const indexOfFirstPost = indexOfLastPost - postsPerPage;
-    setPaginatedPosts(posts.slice(indexOfFirstPost, indexOfLastPost));
-  }, [currentPage, posts, postsPerPage]);
+    if(categoryId === 0){
+      getNoticeListMutate();
+    }
+    getPostListMutate({
+      categoryId: categoryId,
+      page: currentPage - 1,
+      size: pageSize,
+    });
+  }, [categoryId, currentPage])
 
-  const totalPages = Math.ceil(posts.length / postsPerPage);
+  // useEffect(() => {
+  //   const indexOfLastPost = currentPage * postsPerPage;
+  //   const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  //   setPaginatedPosts(posts.slice(indexOfFirstPost, indexOfLastPost));
+  // }, [currentPage, posts, postsPerPage]);
+
+  // const totalPages = Math.ceil(posts.length / postsPerPage);
 
   return (
     <section css={postListStyle}>
-      <div className="notice">공지사항: 새로운 커뮤니티 기능이 추가되었습니다!</div>
+      {userState.id !== null &&       
+      <div className="create-post-container">
+        {userState.role === ROLETPYE.ADMIN && <Link to={"/create/notice"}><div className='create-notice'>{"공지사항 등록"}</div></Link>}
+        <Link to={"/create/post"}><div className='create-post'>{"게시글 등록"}</div></Link>
+      </div>}
+      {/* <div className="notice">공지사항: 새로운 커뮤니티 기능이 추가되었습니다!</div> */}
       <ul>
+        {
+          categoryId === 0 && <>
+            {noticeList.map(notice => (
+              <li key={notice.id} className="notice">
+                  <Link to={`/notice/${notice.id}`}>
+                    {notice.imgUrl && <img src={notice.imgUrl} alt={notice.title} className="post-image" />}
+                    <div className='post-content'>{notice.title}</div>
+                  </Link>
+              </li>
+            ))} 
+          </>
+        }
         {paginatedPosts.map(post => (
           <li key={post.id}>
               <Link to={`/post/${post.id}`}>
-                {post.imageUrl && <img src={post.imageUrl} alt={post.title} className="post-image" />}
+                {post.imgUrl && <img src={post.imgUrl} alt={post.title} className="post-image" />}
                 <div className='post-content'>{post.title}</div>
               </Link>
           </li>

@@ -8,6 +8,9 @@ import LoginPage from './pages/LoginPage/LoginPage';
 import SignUpPage from './pages/SignUpPage/SignUpPage';
 import PostListPage from './pages/PostPage/PostListPage';
 import PostPage from './pages/PostPage/PostPage';
+import NoticeCreatePage from './pages/PostPage/NoticeCreatePage';
+import PostCreatePage from './pages/PostPage/PostCreatePage';
+import AdminSettingPage from './pages/AdminPage/AdminSettingPage';
 
 function App() {
   const [urlPath, setUrlPath] = useState(HeaderType.ORIGIN);
@@ -33,6 +36,10 @@ function App() {
           <Route path="/signup" element={<SignUpPage />}></Route>
 					<Route path="/category/*" element={<PostListPage />}></Route>
           <Route path="/post/*" element={<PostPage />}></Route>
+          {/* <Route path="/notice/*" element={<PostPage />}></Route> */}
+          <Route path="/create/post" element={<PostCreatePage />}></Route>
+          <Route path="/create/notice" element={<NoticeCreatePage />}></Route>
+          <Route path="/admin/setting" element={<AdminSettingPage />}></Route>
 					{/* 상단에 위치하는 라우트들의 규칙을 모두 확인, 일치하는 라우트가 없는경우 처리 */}
 					{/* <Route path="*" element={<NotFound />}></Route> */}
 				</Routes>

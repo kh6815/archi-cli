@@ -3,7 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@craco/craco": "^7.1.0",
     "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/icons-material": "^6.1.0",
+    "@mui/material": "^6.1.0",
     "@tanstack/react-query": "^5.55.4",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -12,23 +16,29 @@
     "@types/node": "^16.18.108",
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
+    "@xeger/quill-image-actions": "^0.7.2",
+    "@xeger/quill-image-formats": "^0.7.2",
     "axios": "^1.7.7",
+    "history": "^5.3.0",
+    "quill-image-resize-module-ts": "^3.0.3",
     "react": "^18.3.1",
+    "react-app-alias": "^2.2.2",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.53.0",
     "react-loader-spinner": "^6.1.6",
+    "react-quill": "^2.0.0",
     "react-router-dom": "^6.26.2",
     "react-scripts": "5.0.1",
     "recoil": "^0.7.7",
+    "recoil-persist": "^5.1.0",
     "styled-components": "^6.1.13",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test"
   },
   "eslintConfig": {
     "extends": [
@@ -54,6 +64,7 @@
     "eslint-plugin-react": "^7.35.2",
     "globals": "^15.9.0",
     "prettier": "^3.3.3",
+    "tsconfig-paths-webpack-plugin": "^4.1.0",
     "typescript-eslint": "^8.5.0"
   }
 }

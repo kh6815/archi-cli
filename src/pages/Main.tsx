@@ -20,39 +20,18 @@ const contentStyle = css`
 `;
 
 const MainPage: React.FC = () => {
-  const posts = [
-    { id: 1, title: '첫 번째 게시글입니다.', imageUrl: "https://archis3.s3.ap-northeast-2.amazonaws.com/dev/photo/file_1725059467601.png" },
-    { id: 2, title: '두 번째 게시글입니다.' },
-    { id: 3, title: '세 번째 게시글입니다.' }
-  ];
+  // const posts = [
+  //   { id: 1, title: '첫 번째 게시글입니다.', imageUrl: "https://archis3.s3.ap-northeast-2.amazonaws.com/dev/photo/file_1725059467601.png" },
+  //   { id: 2, title: '두 번째 게시글입니다.' },
+  //   { id: 3, title: '세 번째 게시글입니다.' }
+  // ];
 
   return (
     <div css={mainPageStyle}>
       <CategoryBar />
       <div css={contentStyle}>
-        <PopularPosts posts={[
-          {
-            id: 3,
-            title: "3번 게시물",
-            imageUrl: "https://archis3.s3.ap-northeast-2.amazonaws.com/dev/photo/file_1725059467601.png",
-          },
-          {
-            id: 4,
-            title: "4번 게시물",
-            imageUrl: "https://archis3.s3.ap-northeast-2.amazonaws.com/dev/photo/file_1725059467601.png",
-          },
-          {
-            id: 5,
-            title: "5번 게시물",
-            imageUrl: "https://archis3.s3.ap-northeast-2.amazonaws.com/dev/photo/file_1725059467601.png",
-          },
-          {
-            id: 6,
-            title: "6번 게시물",
-            imageUrl: "https://archis3.s3.ap-northeast-2.amazonaws.com/dev/photo/file_1725059467601.png",
-          },
-        ]} />
-        <PostList posts={posts} />
+        <PopularPosts />
+        <PostList categoryId={0} />
       </div>
       <Footer />
     </div>
