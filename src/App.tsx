@@ -12,6 +12,7 @@ import NoticeCreatePage from './pages/PostPage/NoticeCreatePage';
 import PostCreatePage from './pages/PostPage/PostCreatePage';
 import AdminSettingPage from './pages/AdminPage/AdminSettingPage';
 import NoticePage from '@pages/PostPage/NoticePage';
+import MyPage from '@pages/MyPage/MyPage';
 
 function App() {
   const [urlPath, setUrlPath] = useState(HeaderType.ORIGIN);
@@ -41,6 +42,7 @@ function App() {
           <Route path="/create/post" element={<PostCreatePage />}></Route>
           <Route path="/create/notice" element={<NoticeCreatePage />}></Route>
           <Route path="/admin/setting" element={<AdminSettingPage />}></Route>
+          <Route path="/my" element={<MyPage />}></Route>
 					{/* 상단에 위치하는 라우트들의 규칙을 모두 확인, 일치하는 라우트가 없는경우 처리 */}
 					{/* <Route path="*" element={<NotFound />}></Route> */}
 				</Routes>

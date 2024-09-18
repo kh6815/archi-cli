@@ -158,6 +158,14 @@ const PostList: React.FC<{ categoryId: number }> = ({ categoryId }) => {
     });
   }, [categoryId, currentPage])
 
+  useEffect(() => {
+    getPostListMutate({
+      categoryId: categoryId,
+      page: currentPage - 1,
+      size: pageSize,
+    });
+  }, [currentPage]);
+
   // useEffect(() => {
   //   const indexOfLastPost = currentPage * postsPerPage;
   //   const indexOfFirstPost = indexOfLastPost - postsPerPage;

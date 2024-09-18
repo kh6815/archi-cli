@@ -3,7 +3,7 @@ import React from 'react';
 import { css } from '@emotion/react';
 import { deleteComment } from '../../../api/postApi';
 import { useMutation } from '@tanstack/react-query';
-import { PostCommentListDto } from '../../../api/dto/post';
+import { DeleteCommentReq, PostCommentListDto } from '../../../api/dto/post';
 import { AxiosError } from 'axios';
 
 // Props 타입 정의
@@ -82,8 +82,8 @@ const secondaryButtonStyle = css`
 `;
 
 const CommentDelete: React.FC<CommentDeleteProps> = ({ comment, close }) => {
-  const deleteCommentApi = async (commentId: number) => {
-    const res = await deleteComment(commentId);
+  const deleteCommentApi = async (deleteCommentReq: DeleteCommentReq) => {
+    const res = await deleteComment(deleteCommentReq);
     return res;
   }
   
@@ -111,7 +111,9 @@ const CommentDelete: React.FC<CommentDeleteProps> = ({ comment, close }) => {
       <div css={commentStyle}>{comment.comment}</div>
       <div css={buttonContainerStyle}>
         <button
-          onClick={() => deleteCommentMutate(comment.id)}
+          onClick={() => deleteCommentMutate({
+            ids: [comment.id]
+          })}
           css={buttonStyle}
         >
           삭제

@@ -126,6 +126,10 @@ export interface UpdateCommentReq {
   commentId: number;
   comment: string;
 }
+
+export interface DeleteCommentReq {
+  ids: number[];
+}
   
 //   export interface InitPwResDto {
 //     message: string;
@@ -134,4 +138,14 @@ export interface UpdateCommentReq {
 
 export interface GetCategoryListDto {
   categoryList: CategoryDto[]
+}
+
+export interface UserCommentDto {
+  id: number;
+  contentId: number;
+  contentTitle: string;
+  comment: string;
+  createAt: string;
+  updateAt: string;
+  like: number;
 }

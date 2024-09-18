@@ -1,6 +1,6 @@
 import { axiosClient } from "@util/axiosClient";
-import { AddCommentReq, AddPostReqDto, DeletePostReq, GetCategoryListDto, GetPostReqDto, NoticeDto, NoticeListDto, PopularPostDto, PostCommentListDto, PostDto, PostListDto, UpdateCommentLikeReq, UpdateCommentReq, UpdateContentLikeReq, UpdatePostReq } from "@api/dto/post";
-import { ResponseDto, ResponsePaingDto } from "@api/dto/responseDto";
+import { AddCommentReq, AddPostReqDto, DeleteCommentReq, DeletePostReq, GetCategoryListDto, GetPostReqDto, NoticeDto, NoticeListDto, PopularPostDto, PostCommentListDto, PostDto, PostListDto, UpdateCommentLikeReq, UpdateCommentReq, UpdateContentLikeReq, UpdatePostReq, UserCommentDto } from "@api/dto/post";
+import { PagingDto, ResponseDto, ResponsePaingDto } from "@api/dto/responseDto";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -144,11 +144,13 @@ export const patchUpdateComment = async (
 };
 
 export const deleteComment = async (
-  commentId: number,
+  deleteCommentReq: DeleteCommentReq,
 ): Promise<ResponseDto<Boolean>> => {
   console.log('deleteComment');
-  const url = `${apiUrl}/comment/delete/${commentId}`;
-  const res = await axiosClient.delete<ResponseDto<Boolean>>(url);
+  const url = `${apiUrl}/comment/delete`;
+  const res = await axiosClient.delete<ResponseDto<Boolean>>(url,{
+    data: deleteCommentReq
+  });
   return res.data;
 };
 
@@ -194,6 +196,34 @@ export const deletePost = async (
   const url = `${apiUrl}/content/delete`;
   const res = await axiosClient.delete<ResponseDto<Boolean>>(url, {
     data: deletePostReq
+  });
+  return res.data;
+};
+
+export const GetUserPostList = async (
+  pagingDto: PagingDto
+): Promise<ResponsePaingDto<PostListDto[]>> => {
+  console.log('GetUserPostList');
+  const url = `${apiUrl}/content/user/list/content`;
+  const res = await axiosClient.get<ResponsePaingDto<PostListDto[]>>(url, {
+    params: {
+      page: pagingDto.page,
+      size: pagingDto.size
+    }
+  });
+  return res.data;
+};
+
+export const GetUserCommentList = async (
+  pagingDto: PagingDto
+): Promise<ResponsePaingDto<UserCommentDto[]>> => {
+  console.log('GetUserCommentList');
+  const url = `${apiUrl}/comment/user/list/comment`;
+  const res = await axiosClient.get<ResponsePaingDto<UserCommentDto[]>>(url, {
+    params: {
+      page: pagingDto.page,
+      size: pagingDto.size
+    }
   });
   return res.data;
 };

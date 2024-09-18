@@ -1,6 +1,6 @@
 import { axiosClient } from "../util/axiosClient";
 import { ResponseDto } from "./dto/responseDto";
-import { InitPwReqDto, InitPwResDto, SignUpReqDto, SignUpResDto } from "./dto/user";
+import { ChangeNickNameReq, ChangePasswordReq, ChangeProfileImageReq, InitPwReqDto, InitPwResDto, SignUpReqDto, SignUpResDto } from "./dto/user";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -81,3 +81,31 @@ export const patchInitPw = async (
 
 //   return res;
 };
+
+export const patchChangePw = async (
+  changePasswordReq: ChangePasswordReq,
+): Promise<ResponseDto<Boolean>> => {
+  console.log('patchChangePw');
+  const url = `${apiUrl}/user/change-password`;
+  const res = await axiosClient.patch<ResponseDto<Boolean>>(url, changePasswordReq);
+  return res.data;
+};
+
+export const patchChangeNickName = async (
+  changeNickNameReq: ChangeNickNameReq,
+): Promise<ResponseDto<Boolean>> => {
+  console.log('patchChangeNickName');
+  const url = `${apiUrl}/user/change-nickname`;
+  const res = await axiosClient.patch<ResponseDto<Boolean>>(url, changeNickNameReq);
+  return res.data;
+};
+
+export const patchChangeProfileImg = async (
+  changeProfileImageReq: ChangeProfileImageReq,
+): Promise<ResponseDto<Boolean>> => {
+  console.log('patchChangeProfileImg');
+  const url = `${apiUrl}/user/change-image`;
+  const res = await axiosClient.patch<ResponseDto<Boolean>>(url, changeProfileImageReq);
+  return res.data;
+};
+

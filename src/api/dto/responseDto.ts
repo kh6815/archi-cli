@@ -9,6 +9,11 @@ interface HeaderDto {
   resultMessage: string;
 }
 
+export interface PagingDto {
+  page: number;
+  size: number;
+}
+
 // export interface SuccessCheckDto {
 //   isSuccess: boolean;
 // }
