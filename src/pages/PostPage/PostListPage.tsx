@@ -21,13 +21,8 @@ const contentStyle = css`
 `;
 
 const PostListPage: React.FC = () => {
-  // const posts = [
-  //   { id: 1, title: '첫 번째 게시글입니다.', imageUrl: "https://archis3.s3.ap-northeast-2.amazonaws.com/dev/photo/file_1725059467601.png" },
-  //   { id: 2, title: '두 번째 게시글입니다.' },
-  //   { id: 3, title: '세 번째 게시글입니다.' }
-  // ];
   const location = useLocation();
-  const [categoryId, setCategoryId] = useState(0);
+  const [categoryId, setCategoryId] = useState<number>();
 
   useEffect(() => {
     if (location.pathname.includes('/category')) {
@@ -38,13 +33,16 @@ const PostListPage: React.FC = () => {
   }, [ location ])
 
   return (
-    <div css={mainPageStyle}>
-      <CategoryBar />
-      <div css={contentStyle}>
-        <PostList categoryId={categoryId} />
+    <>
+      {categoryId &&     
+      <div css={mainPageStyle}>
+        <CategoryBar />
+        <div css={contentStyle}>
+          <PostList categoryId={categoryId} />
+        </div>
       </div>
-      <Footer />
-    </div>
+      }
+    </>
   );
 }
 

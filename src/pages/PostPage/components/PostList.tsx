@@ -150,13 +150,14 @@ const PostList: React.FC<{ categoryId: number }> = ({ categoryId }) => {
   useEffect(() => {
     if(categoryId === 0){
       getNoticeListMutate();
-    }
+    }       
+    
     getPostListMutate({
       categoryId: categoryId,
       page: currentPage - 1,
       size: pageSize,
     });
-  }, [categoryId, currentPage])
+  }, [categoryId])
 
   useEffect(() => {
     getPostListMutate({
