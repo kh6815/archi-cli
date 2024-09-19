@@ -3,6 +3,13 @@ export interface LoginReqDto {
   pw: string;
 }
 
+export interface OAuthLoginReqDto {
+  snsType: string;
+  providerId: string;
+  email: string;
+  name: string;
+}
+
 export interface LogoutReqDto {
   id: string;
 }
@@ -19,4 +26,8 @@ export interface LoginDto {
 export const ROLETPYE = {
   ADMIN: "ADMIN",
   USER: "USER"
+}
+
+export const SNSTPYE = {
+  GOOGLE: "GOOGLE",
 }

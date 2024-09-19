@@ -1,6 +1,6 @@
 
 import { axiosClient } from "../util/axiosClient";
-import { LoginDto, LoginReqDto, LogoutReqDto } from "./dto/auth";
+import { LoginDto, LoginReqDto, LogoutReqDto, OAuthLoginReqDto } from "./dto/auth";
 import { ResponseDto } from "./dto/responseDto";
 
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -26,6 +26,15 @@ export const postLogin = async (
     // };
   
     // return res;
+  };
+
+  export const postOAuthLogin = async (
+    oauthloginUserInfo: OAuthLoginReqDto,
+  ): Promise<ResponseDto<LoginDto>> => {
+    console.log('postpostOAuthLoginogin');
+    const url = `${apiUrl}/auth/oauth-login`;
+    const res = await axiosClient.post<ResponseDto<LoginDto>>(url, oauthloginUserInfo);
+    return res.data;
   };
 
   export const postRefresh = async (

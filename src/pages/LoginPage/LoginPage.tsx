@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { css } from '@emotion/react';
 import axios, { AxiosError } from 'axios';
-import { LoginDto, LoginReqDto } from '../../api/dto/auth';
-import { postLogin } from '../../api/authApi';
+import { LoginDto, LoginReqDto, OAuthLoginReqDto, SNSTPYE } from '../../api/dto/auth';
+import { postLogin, postOAuthLogin } from '../../api/authApi';
 import { useMutation } from '@tanstack/react-query';
 import { useRecoilState } from 'recoil';
 import { userAtom } from '../../stores/user';
@@ -13,6 +13,9 @@ import { TailSpin } from 'react-loader-spinner';
 import Modal from '../../components/Modal';
 import { InitPwReqDto } from '../../api/dto/user';
 import { patchInitPw } from '../../api/userApi';
+import GoogleLoginButton from './components/GoogleLoginButton';
+import { CredentialResponse } from '@react-oauth/google';
+import { jwtDecode } from 'jwt-decode';
 
 const loginPageStyle = css`
   display: flex;
@@ -21,6 +24,10 @@ const loginPageStyle = css`
   justify-content: center;
   height: 100vh;
   background-color: #f4f4f4;
+
+  .sns-login-container {
+    margin: 10px;
+  }
   
   button {
   margin: 10px;
@@ -117,6 +124,44 @@ const { mutate: loginMutate } = useMutation(
   },
 );
 
+const oauthlogin = async (oauthloginUserInfo: OAuthLoginReqDto) => {
+  // 뭔가 데이터 가져오는 함수
+  const res = await postOAuthLogin(oauthloginUserInfo);
+  return res;
+}
+
+const { mutate: oauthloginMutate } = useMutation(
+  {
+    mutationFn: oauthlogin,
+    onSuccess: mutateData => {
+      if (mutateData.header.resultCode === 0) {
+        const userData = mutateData.data;
+        setUserState({
+          id: userData.id,
+          accessToken: userData.accessToken,
+          refreshToken: userData.refreshToken,
+          role: userData.role,
+          imgUrl: userData.imgUrl,
+          nickName: userData.nickName
+        });
+        navigate("/");
+      } else {
+        setErrorMessage(mutateData.header.resultMessage);
+      }
+      setIsLoading(false);
+    },
+    onError: (error: AxiosError) => {
+      if (error.response?.status === 400) {
+        setErrorMessage("로그인 실패");
+      } else {
+        // 다른 서버 에러 처리
+      }
+      setIsLoading(false);
+    },
+  },
+);
+
+
 const initPw = async (initPwReq: InitPwReqDto) => {
   // 뭔가 데이터 가져오는 함수
   const res = await patchInitPw(initPwReq);
@@ -146,6 +191,27 @@ const { mutate: initPwMutate } = useMutation(
   },
 },
 );
+
+  const handleLoginSuccess = async (response: CredentialResponse) => {
+    // Google의 ID 토큰 추출
+    const idToken = response.credential;
+    if(idToken){
+      console.log(jwtDecode(idToken));
+
+      const info:any = jwtDecode(idToken);
+
+      oauthloginMutate({
+        snsType: SNSTPYE.GOOGLE,
+        providerId: info.sub,
+        email: info.email,
+        name: info.name,
+      })
+    }
+  };
+
+  const handleLoginFailure = () => {
+    alert("쇼셜 로그인 실패");
+  };
 
 
   const handleLogin = async(event: React.FormEvent) => {
@@ -191,6 +257,9 @@ const { mutate: initPwMutate } = useMutation(
         <button type="submit">로그인</button>
         {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
       </form>
+      <div className='sns-login-container'>
+        <GoogleLoginButton handleLoginSuccess = {handleLoginSuccess} handleLoginFailure = {handleLoginFailure} />
+      </div>
       <button onClick={() => openModal()}>비밀번호 초기화</button>
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
