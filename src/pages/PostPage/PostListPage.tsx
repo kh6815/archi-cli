@@ -26,7 +26,6 @@ const PostListPage: React.FC = () => {
 
   useEffect(() => {
     if (location.pathname.includes('/category')) {
-      console.log(location.pathname);
       const categoryIdStr = location.pathname.split('/category/')[1];
       setCategoryId(Number(categoryIdStr));
     }

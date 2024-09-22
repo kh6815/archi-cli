@@ -5,11 +5,12 @@ import { patchUpdateComment, postAddComment } from '../../../api/postApi';
 import { useMutation } from '@tanstack/react-query';
 import { AddCommentReq, PostCommentListDto, PostDto, UpdateCommentReq } from '../../../api/dto/post';
 import { AxiosError } from 'axios';
+import { SelectClickComment } from '../PostPage';
 
 // Props 타입 정의
 interface CommentCreateProps {
     postId: number;
-    parentId: number;
+    selectClickComment: SelectClickComment;
     close: (isSuccess: boolean) => void;
 }
 
@@ -33,13 +34,29 @@ const titleStyle = css`
   margin-bottom: 10px;
 `;
 
-const inputStyle = css`
+const sendNickNameStyle = css`
+  color: blue;
+  text-decoration: underline;
+`
+
+// const inputStyle = css`
+//   width: 100%;
+//   padding: 10px;
+//   border-radius: 4px;
+//   border: 1px solid #ddd;
+//   margin-bottom: 10px;
+//   box-sizing: border-box; /* Ensure padding and border are included in the total width */
+// `;
+
+const textareaStyle = css`
   width: 100%;
   padding: 10px;
   border-radius: 4px;
   border: 1px solid #ddd;
   margin-bottom: 10px;
   box-sizing: border-box; /* Ensure padding and border are included in the total width */
+  resize: vertical; /* Allow vertical resizing */
+  height: 100px; /* Initial height for the textarea */
 `;
 
 const buttonContainerStyle = css`
@@ -83,7 +100,7 @@ const secondaryButtonStyle = css`
   }
 `;
 
-const CommentAdd: React.FC<CommentCreateProps> = ({ postId, parentId, close }) => {
+const CommentAdd: React.FC<CommentCreateProps> = ({ postId, selectClickComment, close }) => {
   const [commentValue, setCommentValue] = useState<string>();
 
   const addCommentApi = async (addCommentReq: AddCommentReq) => {
@@ -112,12 +129,12 @@ const CommentAdd: React.FC<CommentCreateProps> = ({ postId, parentId, close }) =
   return (
     <div css={modalStyle}>
       <h2 css={titleStyle}>댓글 추가</h2>
-      <input
-        type="text"
-        placeholder="댓글"
+      {selectClickComment.commentParentId !== 0 && <div><span css={sendNickNameStyle}>@{selectClickComment.sendUserName}</span>님에게 답글쓰기</div>}
+      <textarea
+        placeholder="댓글을 입력하세요"
         value={commentValue}
         onChange={(e) => setCommentValue(e.target.value)}
-        css={inputStyle}
+        css={textareaStyle}
       />
       <div css={buttonContainerStyle}>
         <button
@@ -125,8 +142,9 @@ const CommentAdd: React.FC<CommentCreateProps> = ({ postId, parentId, close }) =
             if(commentValue !== undefined){
               addCommentMutate({
                 contentId: postId,
-                parentId: parentId,
+                parentId: selectClickComment.commentParentId,
                 comment: commentValue,
+                sendUserNickName: selectClickComment.sendUserName
               });
             }
           }}

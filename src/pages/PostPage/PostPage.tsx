@@ -71,6 +71,13 @@ const postInfoTextStyle = css`
   margin-left: 5px;
   font-size: 15px;
 `
+
+const postContentAuthorTextStyle = css`
+  margin-left: 5px;
+  font-size: 15px;
+  color: green;
+`
+
 const postInfoDateTextStyle = css`
   font-size: 12px;
 `
@@ -224,12 +231,30 @@ const commentInfoDateTextStyle = css`
   font-size: 12px;
 `
 
+const sendUserNickNameStyle = css`
+  display: flex;
+  padding-left: 5px;
+  font-size: 1rem;
+  color: blue;
+  text-decoration: underline;
+`;
+
 const commentStyle = css`
   display: flex;
   padding-left: 5px;
   font-size: 1rem;
   color: #555;
 `;
+
+const commentfooterStyle = css`
+  display: flex;
+  align-items: end;
+  justify-content: flex-start;
+
+  div {
+    margin-right: 10px;
+  }
+`
 
 const commentMenuLikeStyle = css`
   margin-top: 10px;
@@ -251,6 +276,11 @@ const deleteTextStyle = css`
   color: red;
 `
 
+export interface SelectClickComment {
+  commentParentId: number;
+  sendUserName: string;
+}
+
 const PostPage: React.FC = () => {
   const [post, setPost] = useState<PostDto>();
   const [commentList, setCommentList] = useState<PostCommentListDto[]>([]);
@@ -258,7 +288,7 @@ const PostPage: React.FC = () => {
   const navigate = useNavigate();
   const [userState, setUserState] = useRecoilState(userAtom);
   const [selectComment, setSelectComment] = useState<PostCommentListDto>();
-  const [selectCommentParentId, setSelectCommentParentId] = useState<number>(0);
+  const [selectClickComment, setSelectClickComment] = useState<SelectClickComment>();
 
   const [isUpdatePostModalOpen, setIsUpdatePostModalOpen] = useState(false);
   const closeUpdatePostModal = () => setIsUpdatePostModalOpen(false);
@@ -446,17 +476,33 @@ const PostPage: React.FC = () => {
                     {comment.commentAuthorImgUrl === null && <div css={commentInfoImgStyle}><PersonIcon /></div>}
                     {comment.commentAuthorImgUrl !== null && <div css={commentInfoImgStyle}><img src={comment.commentAuthorImgUrl} /></div>}
                     <div css={postInfoTextStyle}>{comment.userNickName}</div>
+                    {comment.isContentAuthor && <div css={postContentAuthorTextStyle}>[작성자]</div>}
                   </div>
                   <div css={postInfoDateTextStyle}>{comment.updatedAt}</div>
                 </div>
+                {depth !== 1 && comment.sendUserNickName !== null && <div css={sendUserNickNameStyle}>@{comment.sendUserNickName}</div>}
                 <div css={[commentStyle, comment.delYn === "Y" ? deleteTextStyle : {}]}>{comment.comment}</div>
-                <div css={commentMenuLikeStyle} onClick={() => handleCommentLike(comment)}>
-                  {userState.id === null && <FavoriteBorderIcon />}
-                  {userState.id !== null && comment.likeUserIds.includes(userState.id) && <FavoriteIcon />}
-                  {userState.id !== null && !comment.likeUserIds.includes(userState.id) && <FavoriteBorderIcon />}
-                  <div css={commentMenuLikeDivStyle}>{comment.like}</div>
+                <div css={commentfooterStyle}>
+                  <div css={commentMenuLikeStyle} onClick={() => handleCommentLike(comment)}>
+                    {userState.id === null && <FavoriteBorderIcon />}
+                    {userState.id !== null && comment.likeUserIds.includes(userState.id) && <FavoriteIcon />}
+                    {userState.id !== null && !comment.likeUserIds.includes(userState.id) && <FavoriteBorderIcon />}
+                    <div css={commentMenuLikeDivStyle}>{comment.like}</div>
+                  </div>
+                  {userState.id !== null && !comment.isWriteUser && <span onClick={() => {
+                    let sendUserName = "";
+                    let parentCommentId = -1;
+                    if(depth === 1){
+                      sendUserName = comment.userNickName;
+                      parentCommentId = comment.id;
+                    } else {
+                      sendUserName = comment.userNickName;
+                      parentCommentId = comment.parentCommentId;
+                    }
+                    handleAddComment(parentCommentId, sendUserName);
+                  }}>답글쓰기</span>}
                 </div>
-                {userState.id !== null && depth === 1 && <span onClick={() => {handleAddComment(comment.id)}}><AddIcon /></span>}
+                {/* {userState.id !== null && depth === 1 && <span onClick={() => {handleAddComment(comment.id)}}><AddIcon /></span>} */}
               </div>
               {comment.children.length > 0 && <RenderCommentList commentList={comment.children} depth={depth + 1}/>}
               </React.Fragment>
@@ -490,8 +536,11 @@ const PostPage: React.FC = () => {
     setIsDeletePostModalOpen(true)
   }
 
-  const handleAddComment = (commentParentId: number) => {
-    setSelectCommentParentId(commentParentId)
+  const handleAddComment = (commentParentId: number, sendUserName: string) => {
+    setSelectClickComment({
+      commentParentId: commentParentId,
+      sendUserName: sendUserName,
+    })
     setIsAddCommentModalOpen(true)
   }
 
@@ -546,7 +595,7 @@ const PostPage: React.FC = () => {
           </div>
           <div css={commentSectionStyle}>
             <h3>댓글</h3>
-            {userState.id !== null && <span onClick={() => {handleAddComment(0)}}><AddIcon /></span>}
+            {userState.id !== null && <span onClick={() => {handleAddComment(0, post.contentAuthorNickName)}}><AddIcon /></span>}
             <RenderCommentList commentList={commentList} depth={1}/>
           </div>
         </div>
@@ -568,14 +617,17 @@ const PostPage: React.FC = () => {
               closeDeletePostModal()
             }}/>
         </Modal>
-        <Modal isOpen={isAddCommentModalOpen} onClose={closeAddCommentModal}>
-            <CommentAdd postId={post.id} parentId={selectCommentParentId} close={(isSuccess: boolean) => {
+        {
+          selectClickComment &&         
+          <Modal isOpen={isAddCommentModalOpen} onClose={closeAddCommentModal}>
+            <CommentAdd postId={post.id} selectClickComment={selectClickComment} close={(isSuccess: boolean) => {
               if(isSuccess){
                 getCommentListMutate(post.id)
               }
               closeAddCommentModal()
             }}/>
           </Modal>
+        }
         { selectComment !== undefined &&         
         <>
           <Modal isOpen={isUpdateCommentModalOpen} onClose={closeUpdateCommentModal}>

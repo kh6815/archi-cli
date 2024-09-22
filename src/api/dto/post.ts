@@ -42,9 +42,11 @@ export interface PostDto {
 
 export interface PostCommentListDto {
   id: number;
+  parentCommentId: number;
   comment: string;
   delYn: string;
   userNickName: string;
+  sendUserNickName: string;
   commentAuthorImgUrl: string;
   createdAt: string;
   updatedAt: string;
@@ -120,6 +122,7 @@ export interface AddCommentReq{
   contentId: number,
   parentId: number,
   comment: string,
+  sendUserNickName: string
 }
 
 export interface UpdateCommentReq {

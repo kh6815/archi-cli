@@ -32,13 +32,15 @@ const titleStyle = css`
   margin-bottom: 10px;
 `;
 
-const inputStyle = css`
+const textareaStyle = css`
   width: 100%;
   padding: 10px;
   border-radius: 4px;
   border: 1px solid #ddd;
   margin-bottom: 10px;
   box-sizing: border-box; /* Ensure padding and border are included in the total width */
+  resize: vertical; /* Allow vertical resizing */
+  height: 100px; /* Initial height for the textarea */
 `;
 
 const buttonContainerStyle = css`
@@ -111,12 +113,11 @@ const CommentUpdate: React.FC<CommentUpdateProps> = ({ comment, close }) => {
   return (
     <div css={modalStyle}>
       <h2 css={titleStyle}>댓글 수정</h2>
-      <input
-        type="text"
-        placeholder="댓글"
+      <textarea
+        placeholder="댓글을 입력하세요"
         value={commentValue}
         onChange={(e) => setCommentValue(e.target.value)}
-        css={inputStyle}
+        css={textareaStyle}
       />
       <div css={buttonContainerStyle}>
         <button
