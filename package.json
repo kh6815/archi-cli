@@ -20,6 +20,7 @@
     "@xeger/quill-image-actions": "^0.7.2",
     "@xeger/quill-image-formats": "^0.7.2",
     "axios": "^1.7.7",
+    "env-cmd": "^10.1.0",
     "history": "^5.3.0",
     "jwt-decode": "^4.0.0",
     "quill-image-resize-module-ts": "^3.0.3",
@@ -38,9 +39,11 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "craco start",
-    "build": "craco build",
-    "test": "craco test"
+    "start": "env-cmd -f .env.local craco start",
+    "start:dev": "env-cmd -f .env.development craco start",
+    "start:prod": "env-cmd -f .env.production craco start",
+    "build:dev": "env-cmd -f .env.development craco build",
+    "build:prod": "env-cmd -f .env.production craco build"
   },
   "eslintConfig": {
     "extends": [

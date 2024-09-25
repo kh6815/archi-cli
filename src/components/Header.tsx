@@ -272,7 +272,10 @@ const { mutate: logoutMutate } = useMutation(
   useEffect(() => {
     closeUserDropdown();
     closeNotiDropdown();
-    notificationListMutate();
+
+    if(userState.id !== null){
+      notificationListMutate();
+    }
   }, [])
 
   useEffect(() => {
@@ -302,7 +305,7 @@ const { mutate: logoutMutate } = useMutation(
 
   return (
     <header css={headerStyle}>
-      <Link to="/" className="logo">archi 백엔드 커뮤니티</Link>
+      <Link to="/" className="logo">백엔드 커뮤니티</Link>
       <div className="menu">
         { userState.id === null && 
         <>

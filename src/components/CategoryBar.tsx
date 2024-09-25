@@ -101,14 +101,14 @@ const CategoryItem: React.FC<{ categories: CategoryDto[], depth: number }> = ({ 
     return (
         <div className={depth === 2 ? "sub-categories" : "sub-sub-categories"}>
             {categories.map(subCategory => (
-                <Link key={subCategory.id} to={'/category/' + subCategory.id}>
+                <div key={subCategory.id}>
                     <div key={subCategory.id} className={"sub-category-item"}>
-                        {subCategory.categoryName}
+                      <Link to={'/category/' + subCategory.id}>{subCategory.categoryName}</Link>
                         {subCategory.subCategories !== undefined 
                         && subCategory.subCategories?.length > 0 
                         && <CategoryItem categories={subCategory.subCategories} depth={depth + 1}/>}
                     </div>
-                </Link>
+                </div>
             ))}
         </div>
     );
@@ -151,14 +151,14 @@ const CategoryBar: React.FC = () => {
     return (
       <nav css={categoryBarStyle}>
         {categories.map(category => (
-            <Link key={category.id} className="category-container" to={'/category/' + category.id}>
+            <div key={category.id} className="category-container">
                 <div className="category">
-                {category.categoryName}
+                <Link to={'/category/' + category.id}>{category.categoryName}</Link>
                 {category.subCategories !== undefined 
                 && category.subCategories?.length > 0 
                 && <CategoryItem categories={category.subCategories} depth={2} />}
                 </div>
-            </Link>
+            </div>
         ))}
       </nav>
     );
