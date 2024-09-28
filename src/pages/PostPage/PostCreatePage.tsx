@@ -8,19 +8,14 @@ import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 // import { createBrowserHistory } from 'history';
-import { AddFileReqDto, AddFileRes } from "../../api/dto/file";
+import { AddFileReqDto } from "../../api/dto/file";
 import { AddPostReqDto } from "../../api/dto/post";
 import {postAddFile} from "../../api/fileApi";
 import {postAddPost} from "../../api/postApi";
 import {getCategoryList} from "../../api/postApi";
-import { ResponseDto } from '../../api/dto/responseDto';
 import { CategoryDto } from '../../api/dto/admin';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-
 import { ImageActions } from '@xeger/quill-image-actions';
 import { ImageFormats } from '@xeger/quill-image-formats';
-import { axiosClient } from '@util/axiosClient';
  
 Quill.register('modules/imageActions', ImageActions);
 Quill.register('modules/imageFormats', ImageFormats);
@@ -156,9 +151,9 @@ const selectStyle = css`
 
 const PostCreationPage = () => {
     // // 이미지 처리를 하는 핸들러
-  const imageHandler = () => {
-    console.log("이미지 핸들러 입니다.")
-  };
+  // const imageHandler = () => {
+  //   console.log("이미지 핸들러 입니다.")
+  // };
   const quillRef = useRef<ReactQuill>(null);
   const modules = useMemo<ModulesType>(() => {
     return {
@@ -169,7 +164,7 @@ const PostCreationPage = () => {
           [{ header: [1, 2, 3, 4, 5, 6, false] }],
           ["bold", "italic", "underline", "strike", "blockquote"],
           [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
-          [{ color: [] }, { background: [] }],
+          [{ color: colors }, { background: [] }],
           [{ align: [] }, "link", "image"],
           ["clean"],
         ],
@@ -278,7 +273,7 @@ const PostCreationPage = () => {
     mutationFn: addPostApi,
     onSuccess: mutateData => {
       if (mutateData.header.resultCode === 0) {
-        const data = mutateData.data;
+        // const data = mutateData.data;
 
         navigate("/");
       } else {
@@ -399,9 +394,13 @@ const PostCreationPage = () => {
     }
   }
 
+  // useEffect(() => {
+  //   getCategoryListMutate();
+  // }, [])
   useEffect(() => {
+    // Your effect logic here
     getCategoryListMutate();
-  }, [])
+  }, [getCategoryListMutate]); 
 
   useEffect(() => {
     if(categoryList.length > 0){

@@ -1,19 +1,15 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { css } from '@emotion/react';
 import { updateNotice } from '@api/adminApi';
-import { useMutation } from '@tanstack/react-query';
 import { NoticeDto } from '@api/dto/post';
-import { AxiosError } from 'axios';
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 import { ImageActions } from "@xeger/quill-image-actions";
 import { ImageFormats } from "@xeger/quill-image-formats";
-import { useNavigate } from 'react-router-dom';
-import { CategoryDto, UpdateNoticeReq } from '@api/dto/admin';
-import { Category } from '@mui/icons-material';
-import { AddFileReqDto, AddFileRes } from '@api/dto/file';
+import { UpdateNoticeReq } from '@api/dto/admin';
+import { AddFileReqDto } from '@api/dto/file';
 import { postAddFile } from '@api/fileApi';
 
 Quill.register("modules/imageActions", ImageActions);
@@ -44,11 +40,8 @@ const colors = [
 ];
 
 const formats = [
-  'float',
-  'height',
-  'width',
   'header',
-  'bold',
+  // 'bold',
   'italic',
   'underline',
   'strike',
@@ -60,20 +53,23 @@ const formats = [
   'image',
   'background',
   'align',
+  'float',
+  'height',
+  'width',
 ];
 
-const modules = {
-  imageActions: {},
-  imageFormats: {},
-  toolbar: [
-    [{ header: [1, 2, false] }],
-    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-    [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-    ['link', 'image'],
-    [{ align: [] }, { color: colors }, { background: [] }, { formats: formats }],
-    ['clean'],
-  ],
-};
+// const modules = {
+//   imageActions: {},
+//   imageFormats: {},
+//   toolbar: [
+//     [{ header: [1, 2, false] }],
+//     ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+//     [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
+//     ['link', 'image'],
+//     [{ align: [] }, { color: colors }, { background: [] }, { formats: formats }],
+//     ['clean'],
+//   ],
+// };
 
 
 // 스타일링
@@ -145,20 +141,20 @@ const closeButtonStyle = css`
   font-size: 1rem;
 `;
 
-const selectWrapperStyle = css`
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: flex-start; /* 왼쪽 정렬 */
-  align-items: center; /* 수직 중앙 정렬 */
-`;
+// const selectWrapperStyle = css`
+//   margin-bottom: 20px;
+//   display: flex;
+//   justify-content: flex-start; /* 왼쪽 정렬 */
+//   align-items: center; /* 수직 중앙 정렬 */
+// `;
 
-const selectStyle = css`
-  padding: 10px;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  margin-right: 20px;
-`;
+// const selectStyle = css`
+//   padding: 10px;
+//   font-size: 1rem;
+//   border: 1px solid #ccc;
+//   border-radius: 5px;
+//   margin-right: 20px;
+// `;
 
 const NoticeUpdate: React.FC<NoticeUpdateProps> = ({ noticeData, close }) => {
   const quillRef = useRef<ReactQuill>(null);
@@ -171,24 +167,28 @@ const NoticeUpdate: React.FC<NoticeUpdateProps> = ({ noticeData, close }) => {
           [{ header: [1, 2, 3, 4, 5, 6, false] }],
           ["bold", "italic", "underline", "strike", "blockquote"],
           [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
-          [{ color: [] }, { background: [] }],
+          [{ color: colors }, { background: [] }],
           [{ align: [] }, "link", "image"],
           ["clean"],
         ],
         ImageResize: {
           parchment: Quill.import('parchment')
-        }
+        },
+        // handlers: {
+        //   // 이미지 처리는 우리가 직접 imageHandler라는 함수로 처리할 것이다.
+        //   image: imageHandler,
+        // },
       },
     }
   }, []);
-  const [notice, setnotice] = useState(noticeData);
-  const navigate = useNavigate();
+  const [notice] = useState(noticeData);
+  // const navigate = useNavigate();
 
   const [title, setTitle] = useState(notice.title);
   const [content, setContent] = useState(notice.content);
 
-  const [addFileList, setAddFileList] = useState<AddFileRes[]>([]);
-  const [deleteFileList, setDeleteFileList] = useState<AddFileRes[]>([]);
+  // const [addFileList, setAddFileList] = useState<AddFileRes[]>([]);
+  // const [deleteFileList, setDeleteFileList] = useState<AddFileRes[]>([]);
 
   const addFileApi = async (addFileApi: AddFileReqDto) => {
     const res = await postAddFile(addFileApi);
@@ -237,11 +237,13 @@ const NoticeUpdate: React.FC<NoticeUpdateProps> = ({ noticeData, close }) => {
           }
       } else if(src && src.startsWith('https:')){
         console.log("https: = " + src);
-        const findFile = notice.fileList.find(((file) => {
-          if(file.fileUrl === src){
-            return file
-          }
-        }))
+        // const findFile = notice.fileList.find(((file) => {
+        //   if(file.fileUrl === src){
+        //     return file
+        //   }
+        // }))
+
+        const findFile = notice.fileList.find(file => file.fileUrl === src);
 
         console.log('findFile = ' + findFile)
 

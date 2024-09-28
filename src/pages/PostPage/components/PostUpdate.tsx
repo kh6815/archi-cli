@@ -1,19 +1,17 @@
 /** @jsxImportSource @emotion/react */
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { css } from '@emotion/react';
-import { getCategoryList, patchUpdateComment, updatePost } from '@api/postApi';
+import { getCategoryList, updatePost } from '@api/postApi';
 import { useMutation } from '@tanstack/react-query';
-import { PostCommentListDto, PostDto, UpdateCommentReq, UpdatePostReq } from '@api/dto/post';
+import { PostDto, UpdatePostReq } from '@api/dto/post';
 import { AxiosError } from 'axios';
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 import { ImageActions } from "@xeger/quill-image-actions";
 import { ImageFormats } from "@xeger/quill-image-formats";
-import { useNavigate } from 'react-router-dom';
 import { CategoryDto } from '@api/dto/admin';
-import { Category } from '@mui/icons-material';
-import { AddFileReqDto, AddFileRes } from '@api/dto/file';
+import { AddFileReqDto } from '@api/dto/file';
 import { postAddFile } from '@api/fileApi';
 
 Quill.register("modules/imageActions", ImageActions);
@@ -67,18 +65,18 @@ const formats = [
   'align',
 ];
 
-const modules = {
-  imageActions: {},
-  imageFormats: {},
-  toolbar: [
-    [{ header: [1, 2, false] }],
-    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-    [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-    ['link', 'image'],
-    [{ align: [] }, { color: colors }, { background: [] }, { formats: formats }],
-    ['clean'],
-  ],
-};
+// const modules = {
+//   imageActions: {},
+//   imageFormats: {},
+//   toolbar: [
+//     [{ header: [1, 2, false] }],
+//     ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+//     [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
+//     ['link', 'image'],
+//     [{ align: [] }, { color: colors }, { background: [] }, { formats: formats }],
+//     ['clean'],
+//   ],
+// };
 
 
 // 스타일링
@@ -176,7 +174,7 @@ const PostUpdate: React.FC<PostUpdateProps> = ({ postData, close }) => {
           [{ header: [1, 2, 3, 4, 5, 6, false] }],
           ["bold", "italic", "underline", "strike", "blockquote"],
           [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
-          [{ color: [] }, { background: [] }],
+          [{ color: colors }, { background: [] }],
           [{ align: [] }, "link", "image"],
           ["clean"],
         ],
@@ -186,8 +184,7 @@ const PostUpdate: React.FC<PostUpdateProps> = ({ postData, close }) => {
       },
     }
   }, []);
-  const [post, setPost] = useState(postData);
-  const navigate = useNavigate();
+  const [post] = useState(postData);
 
   const [title, setTitle] = useState(post.title);
   const [content, setContent] = useState(post.content);
@@ -195,11 +192,10 @@ const PostUpdate: React.FC<PostUpdateProps> = ({ postData, close }) => {
   const [categoryList, setCategoryList] = useState<Category[]>([]);
   const [categorySelected, setCategorySelected] = useState<number>(1);
 
-  const [addFileList, setAddFileList] = useState<AddFileRes[]>([]);
-  const [deleteFileList, setDeleteFileList] = useState<AddFileRes[]>([]);
+  // const [addFileList, setAddFileList] = useState<AddFileRes[]>([]);
+  // const [deleteFileList, setDeleteFileList] = useState<AddFileRes[]>([]);
 
   const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    console.log(e.target.value)
     setCategorySelected(Number(e.target.value));
   };
 
@@ -346,11 +342,13 @@ const PostUpdate: React.FC<PostUpdateProps> = ({ postData, close }) => {
           }
       } else if(src && src.startsWith('https:')){
         console.log("https: = " + src);
-        const findFile = post.fileList.find(((file) => {
-          if(file.fileUrl === src){
-            return file
-          }
-        }))
+        // const findFile = post.fileList.find(((file) => {
+        //   if(file.fileUrl === src){
+        //     return file
+        //   }
+        // }))
+
+        const findFile = post.fileList.find(file => file.fileUrl === src);
 
         console.log('findFile = ' + findFile)
 
@@ -407,9 +405,14 @@ const PostUpdate: React.FC<PostUpdateProps> = ({ postData, close }) => {
     }
   }
 
+  // useEffect(() => {
+  //   getCategoryListMutate();
+  // }, [])
+
   useEffect(() => {
+    // Your effect logic here
     getCategoryListMutate();
-  }, [])
+  }, [getCategoryListMutate]); 
 
   return (
     <div css={modalStyle}>

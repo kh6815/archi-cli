@@ -44,7 +44,7 @@ export const postLogin = async (
     const url = `${apiUrl}/auth/refresh`;
     const res = await axiosClient.post<ResponseDto<LoginDto>>(url, {
       headers: {
-        Authorization: `Bearer ${refreshToken}`,
+        Authorization: `${refreshToken}`,
       },
     });
     return res.data;

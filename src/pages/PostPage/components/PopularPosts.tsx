@@ -55,6 +55,16 @@ const popularPostsStyle = css`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    width: 100%;
+  }
+
+  .post-item a span {
+    display: block;
+    width: 100%;
+    overflow: hidden; /* 내용이 넘칠 때 숨김 */
+    text-overflow: ellipsis; /* ... 표시 */
+    white-space: nowrap; /* 텍스트가 한 줄로 표시되도록 */
+    max-width: 180px; /* 너비를 고정 */
   }
 `;
 
@@ -101,7 +111,7 @@ const PopularPosts: React.FC = ({}) => {
           <div className="post-item" key={post.id}>
             <Link to={`/post/${post.id}`}>
                 {post.imgUrl !== "" && <img src={post.imgUrl} alt={post.title} className="post-image" />}
-                {post.title}
+                <span>{post.title}</span>
             </Link>
           </div>
         ))}

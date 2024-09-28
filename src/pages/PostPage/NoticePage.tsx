@@ -131,9 +131,6 @@ const noticeContentStyle = css`
 
   img {
     max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 20px 0;
   }
 `;
 
