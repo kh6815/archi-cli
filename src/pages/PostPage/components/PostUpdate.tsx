@@ -1,27 +1,16 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { css } from '@emotion/react';
 import { getCategoryList, updatePost } from '@api/postApi';
 import { useMutation } from '@tanstack/react-query';
 import { PostDto, UpdatePostReq } from '@api/dto/post';
 import { AxiosError } from 'axios';
-import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-import { ImageActions } from "@xeger/quill-image-actions";
-import { ImageFormats } from "@xeger/quill-image-formats";
 import { CategoryDto } from '@api/dto/admin';
 import { AddFileReqDto } from '@api/dto/file';
 import { postAddFile } from '@api/fileApi';
-
-Quill.register("modules/imageActions", ImageActions);
-Quill.register("modules/imageFormats", ImageFormats);
-
-type ModulesType = {
-  toolbar: {
-    container: unknown[][];
-  };
-};
+import CustomReactQuill from './CustomReactQuill';
 
 interface Category {
   id: number,
@@ -33,51 +22,6 @@ interface PostUpdateProps {
   postData: PostDto;
   close: (isSuccess: boolean) => void;
 }
-
-const colors = [
-  'transparent',
-  'white',
-  'red',
-  'yellow',
-  'green',
-  'blue',
-  'purple',
-  'gray',
-  'black',
-];
-
-const formats = [
-  'float',
-  'height',
-  'width',
-  'header',
-  'bold',
-  'italic',
-  'underline',
-  'strike',
-  'blockquote',
-  'list',
-  'bullet',
-  'link',
-  'color',
-  'image',
-  'background',
-  'align',
-];
-
-// const modules = {
-//   imageActions: {},
-//   imageFormats: {},
-//   toolbar: [
-//     [{ header: [1, 2, false] }],
-//     ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-//     [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-//     ['link', 'image'],
-//     [{ align: [] }, { color: colors }, { background: [] }, { formats: formats }],
-//     ['clean'],
-//   ],
-// };
-
 
 // 스타일링
 
@@ -164,26 +108,6 @@ const selectStyle = css`
 `;
 
 const PostUpdate: React.FC<PostUpdateProps> = ({ postData, close }) => {
-  const quillRef = useRef<ReactQuill>(null);
-  const modules = useMemo<ModulesType>(() => {
-    return {
-      imageActions: {},
-      imageFormats: {},
-      toolbar: {
-        container: [
-          [{ header: [1, 2, 3, 4, 5, 6, false] }],
-          ["bold", "italic", "underline", "strike", "blockquote"],
-          [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
-          [{ color: colors }, { background: [] }],
-          [{ align: [] }, "link", "image"],
-          ["clean"],
-        ],
-        ImageResize: {
-          parchment: Quill.import('parchment')
-        }
-      },
-    }
-  }, []);
   const [post] = useState(postData);
 
   const [title, setTitle] = useState(post.title);
@@ -454,15 +378,10 @@ const PostUpdate: React.FC<PostUpdateProps> = ({ postData, close }) => {
           css={titleInputStyle}
         />
       </div>
-      <ReactQuill
-          theme="snow"
-          ref={quillRef}
-          value={content}
-          formats={formats}
-          onChange={(value) => setContent(value)}
-          modules={modules}
-          style={{ height: '600px' }}
-        />
+      <CustomReactQuill 
+        content={content}
+        setContent={setContent}
+      />
       </div>
     </div>
   );

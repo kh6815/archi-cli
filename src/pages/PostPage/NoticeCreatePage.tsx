@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { useMemo, useRef, useState } from 'react';
-import ReactQuill, { Quill } from 'react-quill';
+import { useState } from 'react';
 import 'react-quill/dist/quill.snow.css';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
@@ -11,62 +10,7 @@ import { AddFileReqDto } from "../../api/dto/file";
 import {postAddFile} from "../../api/fileApi";
 import {postAddNotice} from "../../api/adminApi";
 import { AddNoticeReq } from '../../api/dto/admin';
-
-import { ImageActions } from "@xeger/quill-image-actions";
-import { ImageFormats } from "@xeger/quill-image-formats";
-
-Quill.register("modules/imageActions", ImageActions);
-Quill.register("modules/imageFormats", ImageFormats);
-
-type ModulesType = {
-  toolbar: {
-    container: unknown[][];
-  };
-};
-
-const colors = [
-  'transparent',
-  'white',
-  'red',
-  'yellow',
-  'green',
-  'blue',
-  'purple',
-  'gray',
-  'black',
-];
-
-const formats = [
-  'header',
-  // 'bold',
-  'italic',
-  'underline',
-  'strike',
-  'blockquote',
-  'list',
-  'bullet',
-  'link',
-  'color',
-  'image',
-  'background',
-  'align',
-  'float',
-  'height',
-  'width',
-];
-
-// const modules = {
-//   imageActions: {},
-//   imageFormats: {},
-//   toolbar: [
-//     [{ header: [1, 2, false] }],
-//     ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-//     [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-//     ['link', 'image'],
-//     [{ align: [] }, { color: colors }, { background: [] }, { formats: formats }],
-//     ['clean'],
-//   ],
-// };
+import CustomReactQuill from './components/CustomReactQuill';
 
 // 스타일링
 const containerStyle = css`
@@ -122,32 +66,6 @@ const closeButtonStyle = css`
 const NoticeCreationPage = () => {
 
   const navigate = useNavigate();
-
-  const quillRef = useRef<ReactQuill>(null);
-  const modules = useMemo<ModulesType>(() => {
-    return {
-      imageActions: {},
-      imageFormats: {},
-      toolbar: {
-        container: [
-          [{ header: [1, 2, 3, 4, 5, 6, false] }],
-          ["bold", "italic", "underline", "strike", "blockquote"],
-          [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
-          [{ color: colors }, { background: [] }],
-          [{ align: [] }, "link", "image"],
-          ["clean"],
-        ],
-        ImageResize: {
-          parchment: Quill.import('parchment')
-        },
-        // handlers: {
-        //   // 이미지 처리는 우리가 직접 imageHandler라는 함수로 처리할 것이다.
-        //   image: imageHandler,
-        // },
-      },
-    }
-  }, []);
-
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
@@ -276,21 +194,9 @@ const NoticeCreationPage = () => {
           css={titleInputStyle}
         />
       </div>
-      {/* <ReactQuill
-        style={{ height: '600px' }}
-        theme="snow"
-        modules={modules}
-        value={content}
-        onChange={(value) => setContent(value)}
-      /> */}
-      <ReactQuill
-        theme="snow"
-        ref={quillRef}
-        value={content}
-        formats={formats}
-        onChange={(value) => setContent(value)}
-        modules={modules}
-        style={{ height: '600px' }}
+      <CustomReactQuill 
+        content={content}
+        setContent={setContent}
       />
     </div>
   );
