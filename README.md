@@ -19,49 +19,39 @@ AWS S3 및 CloudFront를 통해 정적 자산을 배포하여 빠르고 안정�
 - 좋아요 기능: 게시글 및 댓글에 좋아요를 누를 수 있는 기능을 통해 사용자 피드백을 시각적으로 제공합니다.
   
 
-프로젝트 구조
+## 프로젝트 구조
+<pre>
 archi-cli/
 ├── src/
-│   ├── main/
-│   │   ├── java/com/archi_sub.archi_sub
-│   │   │   ├── common/          # 서버 공통 로직 및 에러 처리 정의
-│   │   │   ├── config/          # config 파일 관리 및 배치 로직 개발
-│   │   │   └── db/              # DB 관련 Entity, Repository 관리
-│   │   └── resources/
-│   │       ├── profiles/        # 환경별 yml 설정 분리
-│   │       │   ├── dev/         # dev 환경 설정
-│   │       │   ├── local/       # local 환경 설정
-│   │       │   ├── prod/        # prod 환경 설정
-│   │       └── application-core.yml # 공통 환경 설정 파일
-└── .env.development    
-└── .env.local 
-└── .env.production
-└── package.json
+│   ├── api/                             # 서버 통신 DTO, API 정의
+│   ├── assets/                          # 사진 및 정적 파일 저장
+│   ├── common/                          # 공통 파일 저장
+│   ├── components/                      # 공통 컴포넌트 정의
+│   ├── pages/                           # 각 페이지별 화면 개발    
+│   │   ├── AdminPage/
+│   │   │    ├── components/             # AdminPage화면에 대한 컴포넌트 정의 (각 Page 별 컴포넌트가 정의되어있음.)
+│   │   │    ├── AdminSettingPage.tsx    # AdminSettingPage 정의
+│   │   ├── LoginPage/
+│   │   ├── ...
+│   │   └── Main.tsx                     # 메인 Page 
+│   ├── stores                           # recoil 저장소 
+│   ├── styles                           # 공통 스타일 저장
+│   ├── util                             # 공통 유틸리티 코드 저장
+│   ├── APP.tsx      
+│   └── ...            
+├── .env.development    
+├── .env.local 
+├── .env.production
+├── package.json
 └── tsconfig.json
+</pre>
 
-
-
-
-
+## 기술 스택
 기술 스택
-Java 17
-Spring Boot
-JPA (Hibernate), QueryDSL, MySQL
-AWS
-S3
-EC2
-ERD
-유저 테이블
-파일 관련 테이블
-공지사항 관련 테이블
-게시물 관련 테이블
-댓글 관련 테이블
-해당 테이블들의 연관관계를 표현한 다이어그램을 확인할 수 있습니다.
+- React, TypeScript
+- Recoil
+- Emotion, Material
+상태 관리: React Query를 활용하여 서버 데이터와 클라이언트의 상태를 효율적으로 관리하고 동기화합니다.
 
-archi drawio
-
-배포
-서버 배포는 AWS를 사용하여 진행했으며, API 서버와 같은 EC2 서버에 배포 했습니다.
-
-EC2 인스턴스에서 Docker를 통해 MySQL를 컨테이너 형태로 실행하여 데이터베이스 연동.
-Spring Boot 애플리케이션은 개발(dev) 환경에서 JAR 파일을 빌드한 후 EC2에 업로드하여 실행.
+## 배포
+AWS S3 및 CloudFront를 사용하여 정적 파일을 배포하며, 최적화된 성능을 보장합니다.
