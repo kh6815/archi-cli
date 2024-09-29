@@ -38,11 +38,11 @@ archi-cli/
 │   ├── util                             # 공통 유틸리티 코드 저장
 │   ├── APP.tsx      
 │   └── ...            
-├── .env.development    
-├── .env.local 
-├── .env.production
+├── .env.development                     # dev 환경
+├── .env.local                           # local 환경
+├── .env.production                      # prod 환경
 ├── package.json
-└── tsconfig.json
+└── tsconfig.json                        # typescript 설정
 </pre>
 
 ## 기술 스택
