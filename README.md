@@ -25,7 +25,6 @@ archi-cli/
 ├── src/
 │   ├── api/                             # 서버 통신 DTO, API 정의
 │   ├── assets/                          # 사진 및 정적 파일 저장
-│   ├── common/                          # 공통 파일 저장
 │   ├── components/                      # 공통 컴포넌트 정의
 │   ├── pages/                           # 각 페이지별 화면 개발    
 │   │   ├── AdminPage/
