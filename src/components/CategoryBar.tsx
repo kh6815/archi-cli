@@ -145,8 +145,9 @@ const CategoryBar: React.FC = () => {
     );
   
     useEffect(() => {
+      // Your effect logic here
       getCategoryListMutate();
-    }, []);
+    }, [getCategoryListMutate]); 
   
     return (
       <nav css={categoryBarStyle}>

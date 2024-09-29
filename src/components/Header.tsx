@@ -9,7 +9,6 @@ import { postLogOut } from '../api/authApi';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import PersonIcon from '@mui/icons-material/Person';
-import SettingsSharpIcon from '@mui/icons-material/SettingsSharp';
 import { getNotificationList, patchUpdateReadNoti } from '@api/notificationApi';
 import { NotificationListDto } from '@api/dto/notification';
 import NotificationsSharpIcon from '@mui/icons-material/NotificationsSharp';
@@ -138,7 +137,7 @@ const notificationIconContainerStyle = css`
 
 const Header: React.FC<{ type: HeaderType }> = ({ type }) => {
 
-  const [userState, setUserState] = useRecoilState(userAtom);
+  const [userState] = useRecoilState(userAtom);
   const initUserState = useResetRecoilState(userAtom);
   const navigate = useNavigate();
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
@@ -158,7 +157,7 @@ const { mutate: logoutMutate } = useMutation(
     mutationFn: logout,
     onSuccess: mutateData => {
       if (mutateData.header.resultCode === 0) {
-        const userData = mutateData.data;
+        // const userData = mutateData.data;
         initUserState();
         navigate("/");
       } else {

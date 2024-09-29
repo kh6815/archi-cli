@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Header, { HeaderType } from './components/Header';
 import Main from './pages/Main';
 import LoginPage from './pages/LoginPage/LoginPage';
