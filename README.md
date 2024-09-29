@@ -49,9 +49,9 @@ archi-cli/
 ## 기술 스택
 기술 스택
 - React, TypeScript
+- React Query
 - Recoil
 - Emotion, Material
-상태 관리: React Query를 활용하여 서버 데이터와 클라이언트의 상태를 효율적으로 관리하고 동기화합니다.
 
 ## 배포
 AWS S3를 통해 정적 파일을 배포하고, CloudFront를 사용하여 캐싱 및 콘텐츠 보안 유지
