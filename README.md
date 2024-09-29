@@ -54,4 +54,7 @@ archi-cli/
 상태 관리: React Query를 활용하여 서버 데이터와 클라이언트의 상태를 효율적으로 관리하고 동기화합니다.
 
 ## 배포
-AWS S3 및 CloudFront를 사용하여 정적 파일을 배포하며, 최적화된 성능을 보장합니다.
+AWS S3를 통해 정적 파일을 배포하고, CloudFront를 사용하여 캐싱 및 콘텐츠 보안 유지
+
+![image](https://github.com/user-attachments/assets/a72e0bc5-aebc-47bc-b128-0b8ad61160a3)
+
