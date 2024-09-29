@@ -48,7 +48,8 @@ archi-cli/
 
 ## 기술 스택
 기술 스택
-- React, TypeScript
+- TypeScript
+- React
 - React Query
 - Recoil
 - Emotion, Material
