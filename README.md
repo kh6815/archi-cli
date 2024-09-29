@@ -3,6 +3,8 @@
 React를 사용하여 사용자에게 직관적이고 반응성이 뛰어난 UI를 제공하며, 다양한 사용자 상호작용 기능과 모바일 최적화를 지원합니다. 
 AWS S3 및 CloudFront를 통해 정적 자산을 배포하여 빠르고 안정적인 콘텐츠 제공이 가능합니다.
 
+👉 [커뮤니티 사이트 접속하기](https://d3lm2l0zcnsf11.cloudfront.net)
+
 전체 소개글은 해당 프로젝트를 참고해주세요
 - [API 서버](https://github.com/kh6815/archi)
 
