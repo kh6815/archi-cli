@@ -1,46 +1,67 @@
-# Getting Started with Create React App
+# 커뮤니티 웹사이트 프론트엔드 (React 기반)
+이 프로젝트는 최신 웹 기술을 활용하여 구축된 커뮤니티 웹사이트의 프론트엔드입니다. 
+React를 사용하여 사용자에게 직관적이고 반응성이 뛰어난 UI를 제공하며, 다양한 사용자 상호작용 기능과 모바일 최적화를 지원합니다. 
+AWS S3 및 CloudFront를 통해 정적 자산을 배포하여 빠르고 안정적인 콘텐츠 제공이 가능합니다.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+전체 소개글은 해당 프로젝트를 참고해주세요
+- [API 서버](https://github.com/kh6815/archi)
 
-## Available Scripts
+## 주요 기능
+- 어드민 기능: 관리자 계정을 통해 공지사항을 등록 및 수정할 수 있으며, 카테고리 설정을 변경할 수 있는 기능을 제공합니다.
+- 회원 기능: 회원가입, 로그인, 인증 및 JWT 기반 토큰 관리 기능을 통해 사용자의 계정을 안전하게 관리합니다.
+- 구글 로그인: Google OAuth를 통한 간편 로그인 기능을 제공하여 사용자 편의성을 높였습니다.
+- 마이페이지 기능: 사용자는 마이페이지에서 자신의 정보 및 활동 내역을 확인하고 관리할 수 있습니다.
+- 알림 기능: 사용자가 읽지 않은 알림을 실시간으로 확인할 수 있으며, 알림 시스템을 통해 최신 정보를 빠르게 전달받을 수 있습니다.
+- 게시글 목록 및 인기 게시글: 사용자가 작성한 게시글을 카테고리별로 탐색할 수 있으며, 인기 게시글 섹션에서 가장 많은 좋아요를 받은 게시글을 쉽게 확인할 수 있습니다.
+- 카테고리 탐색: 다중 레벨의 카테고리를 지원하여 사용자가 관심 있는 주제를 빠르고 쉽게 찾을 수 있으며, 카테고리 간의 탐색이 용이합니다.
+- 이미지 업로드 및 게시글 작성: 사용자는 이미지 첨부 기능이 포함된 게시글 작성 기능을 통해 다양한 미디어 콘텐츠를 업로드할 수 있습니다.
+- 댓글 기능: 게시글에 댓글을 달고, 다른 사용자와 상호작용할 수 있는 기능을 제공합니다.
+- 좋아요 기능: 게시글 및 댓글에 좋아요를 누를 수 있는 기능을 통해 사용자 피드백을 시각적으로 제공합니다.
+  
 
-In the project directory, you can run:
+프로젝트 구조
+archi-cli/
+├── src/
+│   ├── main/
+│   │   ├── java/com/archi_sub.archi_sub
+│   │   │   ├── common/          # 서버 공통 로직 및 에러 처리 정의
+│   │   │   ├── config/          # config 파일 관리 및 배치 로직 개발
+│   │   │   └── db/              # DB 관련 Entity, Repository 관리
+│   │   └── resources/
+│   │       ├── profiles/        # 환경별 yml 설정 분리
+│   │       │   ├── dev/         # dev 환경 설정
+│   │       │   ├── local/       # local 환경 설정
+│   │       │   ├── prod/        # prod 환경 설정
+│   │       └── application-core.yml # 공통 환경 설정 파일
+└── .env.development    
+└── .env.local 
+└── .env.production
+└── package.json
+└── tsconfig.json
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+기술 스택
+Java 17
+Spring Boot
+JPA (Hibernate), QueryDSL, MySQL
+AWS
+S3
+EC2
+ERD
+유저 테이블
+파일 관련 테이블
+공지사항 관련 테이블
+게시물 관련 테이블
+댓글 관련 테이블
+해당 테이블들의 연관관계를 표현한 다이어그램을 확인할 수 있습니다.
 
-### `npm run build`
+archi drawio
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+배포
+서버 배포는 AWS를 사용하여 진행했으며, API 서버와 같은 EC2 서버에 배포 했습니다.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+EC2 인스턴스에서 Docker를 통해 MySQL를 컨테이너 형태로 실행하여 데이터베이스 연동.
+Spring Boot 애플리케이션은 개발(dev) 환경에서 JAR 파일을 빌드한 후 EC2에 업로드하여 실행.
